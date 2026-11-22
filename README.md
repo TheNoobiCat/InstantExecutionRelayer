@@ -258,6 +258,12 @@ pushing changes.
   output can be wrong or stale; confirm every trade in the client and rely on
   on-chain state.
 
+## Related repositories
+
+- [BrokerFi frontend](https://github.com/TheNoobiCat/BrokerFi) — archived Next.js testnet frontend
+- [BrokerFi contracts](https://github.com/TheNoobiCat/bf-contracts) — archived Solidity reference
+- [FeatherEngine](https://github.com/TheNoobiCat/FeatherEngine) — offchain options matcher and liquidator
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
