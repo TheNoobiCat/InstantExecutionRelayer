@@ -235,8 +235,8 @@ go test ./...
 ```
 
 There are no end-to-end, fork, or integration tests. Build and vet are the main
-static checks. CI runs `go build ./...`, `go vet ./...`, and `go test ./...` on
-pushes and pull requests.
+static checks. Run `go build ./...`, `go vet ./...`, and `go test ./...` before
+pushing changes.
 
 ## Operational notes
 
