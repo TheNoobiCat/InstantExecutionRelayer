@@ -1,0 +1,26 @@
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Compiled binaries and build output
+*.exe
+*.test
+*.out
+/bin/
+/dist/
+/build/
+/instantexecutionrelayer
+/keeper/keeper
+/keeper/cmd/cmd
+
+# Local databases and runtime state
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Editor / OS noise
+.DS_Store
+.idea/
+.vscode/

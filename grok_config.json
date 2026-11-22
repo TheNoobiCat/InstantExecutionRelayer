@@ -1,0 +1,418 @@
+{
+  "api": {
+    "model": "grok-4-1-fast-non-reasoning",
+    "base_url": "https://api.x.ai/v1",
+    "timeout_seconds": 120,
+    "max_tokens": 0,
+    "temperature": null
+  },
+  "captcha": {
+    "enabled": true,
+    "re_verify_after_seconds": 600,
+    "re_verify_after_messages": 50,
+    "verify_url": "https://challenges.cloudflare.com/turnstile/v0/siteverify"
+  },
+  "session": {
+    "max_history_length": 100,
+    "idle_timeout_seconds": 300,
+    "max_sessions_per_ip": 3,
+    "max_global_sessions": 50,
+    "min_message_interval_seconds": 2
+  },
+  "chat": {
+    "system_prompt_path": "SYSTEM_PROMPT.md",
+    "stream": true,
+    "tool_choice": "auto",
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_available_assets",
+          "description": "Returns the perpetual futures markets available on BrokerFi. Use once to discover supported symbols; do not call repeatedly.",
+          "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "search_asset",
+          "description": "Fuzzy search by name or ticker",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_current_market",
+          "description": "Live price snapshot for one asset. Pass a specific symbol (e.g. BTCUSD, NVDA, TSLA). Returns price, 24h change, hasPerp flag. Use asset='all' ONLY to get a lightweight overview (perp prices + asset list, no spot prices). For specific prices, always pass the exact symbol.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "asset": {
+                "type": "string",
+                "description": "Specific symbol (BTCUSD, NVDA, TSLA) or 'all' for overview only"
+              }
+            },
+            "required": [
+              "asset"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_open_positions",
+          "description": "All open perp positions with PnL, entry/current price, leverage, liq price. Skip if get_account_summary already returned positionCount=0.",
+          "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_position_detail",
+          "description": "Deep info on one position",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "position_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "asset": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "type": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "perp (options are not supported)"
+              }
+            },
+            "required": []
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_account_summary",
+          "description": "USDC balance, equity, margin, unrealized PnL, and position count. Includes brief position list\u2014often enough without calling get_open_positions separately.",
+          "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_historical_candles",
+          "description": "OHLCV + volume for any timeframe",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "asset": {
+                "type": "string"
+              },
+              "timeframe": {
+                "type": "string"
+              },
+              "limit": {
+                "type": "integer"
+              },
+              "start_time": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "ISO timestamp optional"
+              }
+            },
+            "required": [
+              "asset",
+              "timeframe",
+              "limit"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_technical_indicators",
+          "description": "Pre-computed or on-demand TA indicators. Supported: SMA, EMA, RSI, MACD, ATR, Bollinger, Stochastic, Williams %R, Donchian, CCI, VWAP, ADX",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "asset": {
+                "type": "string"
+              },
+              "timeframe": {
+                "type": "string"
+              },
+              "indicators": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "period": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "asset",
+              "timeframe",
+              "indicators"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "get_trade_history",
+          "description": "Recent perp fills, funding credits/debits, and liquidations",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "start_time": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": []
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "check_liquidation_risk",
+          "description": "Current equity vs total maintenance margin",
+          "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "simulate_trade_margin_impact",
+          "description": "Margin impact of a proposed trade",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "trade": {
+                "type": "object",
+                "description": "proposed trade details"
+              }
+            },
+            "required": [
+              "trade"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "feature": "perps",
+        "function": {
+          "name": "execute_perp_trade",
+          "description": "Open a testnet perpetual position. Requires asset, side (long/short), collateral in USDC, and leverage. Optionally set order_type to limit with a limit_price, and/or attach stop_loss and take_profit levels. Confirm the full order with the user BEFORE calling this tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "asset": {
+                "type": "string",
+                "description": "Asset symbol e.g. BTC, ETH, SOL"
+              },
+              "side": {
+                "type": "string",
+                "enum": [
+                  "long",
+                  "short"
+                ],
+                "description": "Trade direction"
+              },
+              "collateral_usdc": {
+                "type": "number",
+                "description": "Collateral amount in USDC (minimum 10)"
+              },
+              "leverage": {
+                "type": "number",
+                "description": "Leverage multiplier (1-50)"
+              },
+              "order_type": {
+                "type": "string",
+                "enum": [
+                  "market",
+                  "limit"
+                ],
+                "description": "Order type, defaults to market"
+              },
+              "limit_price": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "Limit price in USD (required if order_type is limit)"
+              },
+              "stop_loss": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "Stop loss price in USD"
+              },
+              "take_profit": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "Take profit price in USD"
+              }
+            },
+            "required": [
+              "asset",
+              "side",
+              "collateral_usdc",
+              "leverage"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "close_perp_position",
+          "description": "Close full or partial position",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "position_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "percentage": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "0-100, default 100"
+              }
+            },
+            "required": []
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "request_grok_research",
+          "description": "Request deep research using xAI's agentic tools (web search, X/Twitter search). Use when you need real-time information, market sentiment, news, or complex analysis that requires external data sources. This runs as a Subagent.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "Specific research question, for example: 'latest BTC funding rates and notable whale activity over the past 12 hours'."
+              },
+              "reason": {
+                "type": "string",
+                "description": "Short explanation of why the research is needed and which decision it will inform."
+              }
+            },
+            "required": [
+              "query",
+              "reason"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "function": {
+          "name": "set_cooldown",
+          "description": "Set a cooldown period in autonomous mode. The AI will pause for the specified seconds before continuing its loop. Use when no edge exists or to prevent excessive API calls.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "seconds": {
+                "type": "integer",
+                "description": "Number of seconds to cooldown"
+              },
+              "reason": {
+                "type": "string",
+                "description": "Reason for cooldown (e.g., 'no edge detected', 'monitoring positions')"
+              }
+            },
+            "required": [
+              "seconds",
+              "reason"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "features": {
+    "enable_perps": true,
+    "enable_options": false,
+    "enable_polymarket": false,
+    "enable_autonomous": true,
+    "enable_hype_wins": false,
+    "enable_chaotic_loss": false,
+    "default_risk_per_trade": 1.5,
+    "max_portfolio_risk": 10
+  },
+  "websocket": {
+    "read_buffer_size": 4096,
+    "write_buffer_size": 4096,
+    "max_message_size": 524288,
+    "ping_interval_seconds": 30,
+    "pong_wait_seconds": 60,
+    "allowed_origins": []
+  }
+}

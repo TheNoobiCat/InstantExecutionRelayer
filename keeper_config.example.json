@@ -1,0 +1,59 @@
+{
+  "pyth": {
+    "stream_endpoint": "https://hermes.pyth.network",
+    "rest_endpoint": "https://hermes.pyth.network",
+    "price_feeds": {
+      "ETH-PERP": "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace",
+      "BTC-PERP": "0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43"
+    }
+  },
+  "contracts": {
+    "pyth_address": "0x0000000000000000000000000000000000000000",
+    "perps_factory": "0x0000000000000000000000000000000000000000"
+  },
+  "monitored_markets": [
+    {
+      "market_symbol": "ETH-PERP",
+      "market_id": "eth-perp",
+      "trading": "0x0000000000000000000000000000000000000000",
+      "limit_order_book": "0x0000000000000000000000000000000000000000",
+      "pool": "0x0000000000000000000000000000000000000000",
+      "pyth_price_id": "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace",
+      "max_batch_size": 8,
+      "min_profit_usd": 0.0,
+      "max_gas_wei": "50000000000000000"
+    },
+    {
+      "market_symbol": "BTC-PERP",
+      "market_id": "btc-perp",
+      "trading": "0x0000000000000000000000000000000000000000",
+      "limit_order_book": "0x0000000000000000000000000000000000000000",
+      "pool": "0x0000000000000000000000000000000000000000",
+      "pyth_price_id": "0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43",
+      "max_batch_size": 8,
+      "min_profit_usd": 0.0,
+      "max_gas_wei": "50000000000000000"
+    }
+  ],
+  "gas": {
+    "multiplier": 1.2,
+    "max_priority_fee_gwei": 4,
+    "base_fee_buffer_gwei": 2,
+    "gas_limit_buffer": 1.3
+  },
+  "metrics": {
+    "prometheus_port": 9091
+  },
+  "sync": {
+    "full_sync_interval_sec": 30,
+    "startup_lookback_blocks": 50000,
+    "goldsky_url": ""
+  },
+  "execution": {
+    "max_pending_txs": 4,
+    "simulation_timeout_ms": 3000,
+    "retry_backoff_sec": 5,
+    "max_retries": 3,
+    "pyth_update_max_age_sec": 5
+  }
+}
